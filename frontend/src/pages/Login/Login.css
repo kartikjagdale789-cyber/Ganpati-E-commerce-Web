@@ -1,0 +1,50 @@
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg,#78350f,#b45309,#d97706,#fbbf24);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Segoe UI', system-ui, sans-serif; padding: 20px;
+  box-sizing: border-box;
+}
+.login-card {
+  background:#fff; border-radius:20px; padding:40px;
+  width:100%; max-width:420px; box-shadow:0 30px 80px rgba(0,0,0,.4);
+  box-sizing: border-box;
+}
+.login-header    { text-align:center; margin-bottom:30px; }
+.login-emoji     { font-size:72px; margin-bottom:8px; }
+.login-title     { margin:0 0 4px; font-size:22px; font-weight:800; color:#92400e; }
+.login-subtitle  { margin:0; color:#9ca3af; font-size:13px; }
+.login-tags      { margin-top:10px; display:flex; gap:6px; justify-content:center; flex-wrap:wrap; }
+.login-tag       { background:#fffbeb; color:#92400e; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+.login-field     { margin-bottom:14px; }
+.login-field:nth-of-type(2) { margin-bottom:16px; }
+.login-field label {
+  display:block; font-size:11px; font-weight:700; color:#6b7280;
+  margin-bottom:5px; text-transform:uppercase; letter-spacing:.05em;
+}
+.login-field input {
+  width:100%; padding:9px 12px; border:1.5px solid #e5e7eb; border-radius:8px;
+  font-size:14px; font-family:inherit; outline:none; box-sizing:border-box;
+}
+.login-field input:focus { border-color:#f59e0b; box-shadow:0 0 0 3px rgba(245,158,11,.15); }
+.login-error {
+  background:#fee2e2; color:#b91c1c; border-radius:8px; padding:10px 14px;
+  font-size:13px; font-weight:700; margin-bottom:14px;
+}
+.login-btn {
+  width:100%; background:linear-gradient(135deg,#ff6b00,#f59e0b); color:#fff;
+  border:none; padding:14px; border-radius:12px; cursor:pointer;
+  font-weight:800; font-size:16px; font-family:inherit;
+}
+.login-btn:disabled { opacity:.7; cursor:not-allowed; }
+.login-demo { text-align:center; margin-top:14px; font-size:12px; color:#9ca3af; }
+
+@media (max-width: 480px) {
+  .login-page { padding: 16px 12px; }
+  .login-card { padding: 24px 18px; border-radius: 16px; }
+  .login-emoji { font-size: 54px; margin-bottom: 4px; }
+  .login-title { font-size: 20px; }
+  .login-header { margin-bottom: 22px; }
+  .login-btn { padding: 12px; font-size: 15px; }
+}
+

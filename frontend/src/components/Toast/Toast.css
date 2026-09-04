@@ -1,0 +1,13 @@
+.toast {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px; border-radius: 10px;
+  font-weight: 700; font-size: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.18);
+  max-width: 340px;
+}
+.toast--success { background:#dcfce7; color:#15803d; }
+.toast--error   { background:#fee2e2; color:#b91c1c; }
+.toast--info    { background:#dbeafe; color:#1e40af; }
+.toast--warning { background:#fef9c3; color:#92400e; }
+.toast__msg   { flex: 1; }
+.toast__close { background:none; border:none; cursor:pointer; font-size:16px; color:inherit; }

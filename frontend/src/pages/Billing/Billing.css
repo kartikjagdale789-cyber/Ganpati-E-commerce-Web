@@ -1,0 +1,160 @@
+.page-title { margin:0 0 18px; color:#92400e; font-size:20px; font-weight:800; }
+.billing-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media(max-width:900px){ .billing-grid{ grid-template-columns:1fr; } }
+
+.section-heading { font-weight:800; color:#92400e; margin-bottom:14px; font-size:14px; }
+
+.form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:11px; font-weight:700; color:#6b7280; margin-bottom:5px; text-transform:uppercase; letter-spacing:.05em; }
+.field input, .field select, .field textarea {
+  width:100%; padding:9px 12px; border:1.5px solid #e5e7eb; border-radius:8px;
+  font-size:14px; font-family:inherit; outline:none; box-sizing:border-box; background:#fff;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-color:#f59e0b; box-shadow:0 0 0 3px rgba(245,158,11,.15); }
+.input-upi-locked { background:#f5f3ff!important; }
+.input-upi-border { border-color:#7c3aed!important; }
+.upi-hint { font-size:11px; color:#7c3aed; margin-top:4px; font-weight:600; }
+.disabled-hint { font-size:11px; color:#9ca3af; text-align:center; margin-top:6px; }
+
+.cart-add-row { display:grid; grid-template-columns:1fr auto; gap:10px; margin-bottom:10px; }
+.cart-add-row select { padding:9px 12px; border:1.5px solid #e5e7eb; border-radius:8px; font-size:14px; min-width:0; box-sizing:border-box; }
+.cart-add-row input  { width:70px; padding:9px 12px; border:1.5px solid #e5e7eb; border-radius:8px; font-size:14px; box-sizing:border-box; }
+
+.cart-table { width:100%; border-collapse:collapse; font-size:13px; margin-top:14px; }
+.cart-table thead tr { background:#fffbeb; }
+.cart-table th { padding:7px 8px; text-align:left; font-weight:700; color:#92400e; font-size:11px; }
+.cart-table td { padding:7px 8px; border-top:1px solid #f3f4f6; }
+.cart-item-name { font-size:13px; font-weight:700; }
+.cart-item-type { font-size:11px; color:#6b7280; }
+.cart-remove-btn { background:#fee2e2; color:#b91c1c; border:none; border-radius:6px; padding:3px 8px; cursor:pointer; font-size:12px; font-weight:700; }
+.cell-green { color:#15803d; }
+.cell-bold  { font-weight:700; }
+
+.method-tabs { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+.method-tab {
+  padding:8px 4px; border-radius:8px; border:1.5px solid #e5e7eb; background:#fff; color:#6b7280;
+  cursor:pointer; font-weight:500; font-size:11px; font-family:inherit; text-align:center;
+}
+.method-tab--active { border-color:#f59e0b; background:#fffbeb; color:#b45309; font-weight:800; }
+.method-tab--upi.method-tab--active { border-color:#7c3aed; background:#ede9fe; color:#7c3aed; }
+
+.amount-boxes { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; border-radius:10px; overflow:hidden; border:1.5px solid #fde68a; margin-bottom:12px; }
+.amount-box { text-align:center; padding:10px 6px; }
+.amount-box__label { font-size:10px; font-weight:700; opacity:.75; }
+.amount-box__value { font-size:17px; font-weight:800; margin-top:2px; }
+
+.amount-summary { background:#fffbeb; border:1.5px solid #fde68a; border-radius:10px; padding:12px 14px; margin-bottom:14px; }
+.amount-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #fef9c3; font-size:13px; }
+.amount-row--bold { font-weight:800; font-size:15px; }
+.amount-summary__status { text-align:center; margin-top:10px; }
+
+.success-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.success-icon { width:40px; height:40px; border-radius:50%; background:#dcfce7; display:flex; align-items:center; justify-content:center; font-size:22px; }
+.success-title { font-weight:800; color:#15803d; font-size:15px; }
+.success-sub   { font-size:12px; color:#6b7280; }
+
+.shop-banner { background:linear-gradient(135deg,#ff6b00,#f59e0b); border-radius:10px; padding:14px 18px; color:#fff; margin-bottom:14px; }
+.shop-banner__name { font-size:17px; font-weight:800; }
+.shop-banner__addr { font-size:11px; opacity:.85; margin-top:2px; }
+
+.detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.detail-box { background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:8px 12px; }
+.detail-box__label { font-size:10px; color:#9ca3af; font-weight:700; text-transform:uppercase; }
+.detail-box__value { font-weight:700; margin-top:2px; font-size:13px; }
+
+.action-row { display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+.preview-customer { margin-bottom:10px; font-size:13px; }
+.empty-cart { text-align:center; padding:40px 20px; color:#9ca3af; }
+.empty-cart__icon { font-size:48px; margin-bottom:10px; }
+
+.quick-amount-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.quick-amount-btn { border-radius:8px; padding:7px; cursor:pointer; font-weight:700; font-size:12px; font-family:inherit; border:1px solid; }
+.quick-amount-btn--full { background:#ede9fe; color:#7c3aed; border-color:#c4b5fd; }
+.quick-amount-btn--half { background:#f3f4f6; color:#374151; border-color:#e5e7eb; }
+
+/* ── UPI Payment Panel ─────────────────────────────────────────────────── */
+.upi-panel { background:linear-gradient(145deg,#0f172a,#1e293b); border-radius:16px; overflow:hidden; border:2px solid #334155; }
+.upi-panel--warning { background:#fef9c3; border:1.5px dashed #fde047; border-radius:12px; padding:18px; text-align:center; }
+.upi-panel__warn-icon { font-size:32px; margin-bottom:8px; }
+.upi-panel__warn-title { font-weight:700; color:#92400e; margin-bottom:6px; }
+.upi-panel__warn-text { font-size:13px; color:#6b7280; margin-bottom:12px; }
+.upi-panel__warn-hint { font-size:12px; color:#9ca3af; }
+
+.upi-panel__header { background:linear-gradient(135deg,#7c3aed,#4f46e5); padding:14px 18px; display:flex; align-items:center; gap:10px; }
+.upi-panel__header--success { background:linear-gradient(135deg,#059669,#10b981); }
+.upi-panel__header-icon { font-size:22px; }
+.upi-panel__header-title { color:#fff; font-weight:800; font-size:15px; }
+.upi-panel__header-sub   { color:rgba(255,255,255,.7); font-size:11px; }
+.upi-panel__header-amount { margin-left:auto; background:rgba(255,255,255,.15); border-radius:20px; padding:4px 12px; color:#a5f3fc; font-weight:800; font-size:13px; }
+
+.upi-panel__body { padding:18px 18px 0; }
+.upi-panel__empty { text-align:center; padding:20px 0; color:#64748b; }
+.upi-panel__empty-icon { font-size:36px; margin-bottom:8px; }
+
+.upi-panel__qr-wrap { display:flex; justify-content:center; margin-bottom:16px; }
+.upi-panel__qr-card { background:#fff; border-radius:16px; padding:14px; box-shadow:0 0 0 4px rgba(99,102,241,.3), 0 8px 32px rgba(0,0,0,.4); text-align:center; max-width:100%; box-sizing:border-box; }
+.upi-panel__qr-caption { font-size:10px; font-weight:700; color:#6b7280; letter-spacing:.05em; text-transform:uppercase; margin-top:8px; }
+.upi-panel__qr-amount { font-size:13px; font-weight:800; color:#7c3aed; margin-top:2px; }
+.upi-panel__qr-amount--success { color:#059669; }
+
+.upi-panel__apps { display:flex; justify-content:center; gap:14px; margin-bottom:14px; }
+.upi-panel__app { text-align:center; }
+.upi-panel__app-icon { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; margin-bottom:3px; box-shadow:0 2px 8px rgba(0,0,0,.3); }
+.upi-panel__app-label { color:#94a3b8; font-size:9px; font-weight:700; }
+
+.upi-panel__id-row { background:#1e293b; border:1px solid #334155; border-radius:10px; padding:10px 14px; margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+.upi-panel__id-label { font-size:10px; color:#64748b; font-weight:700; text-transform:uppercase; margin-bottom:2px; }
+.upi-panel__id-value { color:#e2e8f0; font-weight:700; font-size:14px; font-family:monospace; word-break:break-all; }
+.upi-panel__copy-btn { margin-left:auto; background:#334155; color:#94a3b8; border:1px solid #475569; border-radius:8px; padding:6px 12px; cursor:pointer; font-size:12px; font-weight:700; flex-shrink:0; }
+.upi-panel__copy-btn--copied { background:#065f46; color:#6ee7b7; border-color:#059669; }
+
+.upi-panel__detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.upi-panel__detail-box { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:8px 12px; }
+.upi-panel__detail-label { font-size:10px; color:#64748b; font-weight:700; text-transform:uppercase; }
+.upi-panel__detail-value { color:#cbd5e1; font-weight:600; font-size:12px; margin-top:2px; word-break:break-all; }
+.upi-panel__detail-value--cyan { color:#a5f3fc; font-weight:800; font-size:16px; }
+
+.upi-panel__open-btn {
+  width:100%; background:linear-gradient(135deg,#7c3aed,#4f46e5); color:#fff; border:none; border-radius:10px;
+  padding:12px 16px; cursor:pointer; font-weight:800; font-size:14px; font-family:inherit;
+  display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:10px;
+  box-shadow:0 4px 16px rgba(99,102,241,.4);
+}
+.upi-panel__open-btn span { font-size:11px; font-weight:600; opacity:.8; }
+
+.upi-panel__confirm-wrap { border-top:1px solid #1e293b; padding:14px 0 18px; }
+.upi-panel__confirm-btn {
+  width:100%; background:linear-gradient(135deg,#059669,#10b981); color:#fff; border:1.5px solid #059669;
+  border-radius:10px; padding:13px 16px; cursor:pointer; font-weight:800; font-size:14px; font-family:inherit;
+}
+.upi-panel__confirm-btn:disabled { background:#1e293b; color:#475569; border-color:#334155; cursor:not-allowed; }
+.upi-panel__confirm-hint { text-align:center; margin-top:8px; color:#64748b; font-size:12px; }
+.upi-panel__confirmed { text-align:center; background:#064e3b; border:1px solid #059669; border-radius:10px; padding:14px; }
+.upi-panel__confirmed-icon { font-size:24px; margin-bottom:4px; }
+.upi-panel__confirmed-title { color:#6ee7b7; font-weight:800; font-size:14px; }
+.upi-panel__confirmed-sub { color:#34d399; font-size:12px; margin-top:4px; }
+
+@media (max-width: 640px) {
+  .form-grid-2 { grid-template-columns: 1fr; gap: 8px; }
+  .method-tabs { grid-template-columns: repeat(auto-fit, minmax(62px, 1fr)); gap: 5px; }
+}
+
+@media (max-width: 480px) {
+  .page-title { font-size: 18px; margin-bottom: 12px; }
+  .cart-add-row { grid-template-columns: 1fr 65px; gap: 6px; }
+  .cart-table th, .cart-table td { padding: 6px 4px; font-size: 12px; }
+  .cart-item-name { font-size: 12px; }
+  .amount-boxes { gap: 4px; }
+  .amount-box { padding: 8px 4px; }
+  .amount-box__value { font-size: 14px; }
+  .detail-grid { grid-template-columns: 1fr; }
+  .upi-panel__header { flex-wrap: wrap; gap: 8px; }
+  .upi-panel__header-amount { margin-left: 0; }
+  .upi-panel__detail-grid { grid-template-columns: 1fr; }
+  .upi-panel__apps { gap: 8px; }
+  .upi-panel__id-row { flex-wrap: wrap; }
+  .upi-panel__copy-btn { margin-left: 0; width: 100%; text-align: center; }
+  .action-row button { width: 100%; }
+}
+

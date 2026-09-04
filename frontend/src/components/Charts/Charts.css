@@ -1,0 +1,19 @@
+.chart         { display:flex; flex-direction:column; gap:10px; }
+.chart__row    { display:grid; grid-template-columns:160px 1fr 50px; align-items:center; gap:10px; }
+.chart__label  { font-size:12px; font-weight:600; color:#374151; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.chart__bar-wrap { height:12px; background:#f3f4f6; border-radius:6px; overflow:hidden; }
+.chart__bar    { height:100%; border-radius:6px; transition:width .4s ease; }
+.chart__value  { font-size:13px; font-weight:800; color:#b45309; text-align:right; }
+
+@media (max-width: 640px) {
+  .chart__row { grid-template-columns: 110px 1fr 45px; gap: 8px; }
+  .chart__label { font-size: 11px; }
+  .chart__value { font-size: 12px; }
+}
+
+@media (max-width: 420px) {
+  .chart__row { grid-template-columns: 90px 1fr 40px; gap: 6px; }
+  .chart__label { font-size: 10px; }
+  .chart__value { font-size: 11px; }
+}
+

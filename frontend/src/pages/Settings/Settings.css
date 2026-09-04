@@ -1,0 +1,43 @@
+.page-title { margin:0 0 18px; color:#92400e; font-size:20px; font-weight:800; }
+.settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media(max-width:900px){ .settings-grid{ grid-template-columns:1fr; } }
+.section-heading { font-weight:800; color:#92400e; margin-bottom:14px; font-size:14px; }
+
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:11px; font-weight:700; color:#6b7280; margin-bottom:5px; text-transform:uppercase; letter-spacing:.05em; }
+.field input, .field textarea {
+  width:100%; padding:9px 12px; border:1.5px solid #e5e7eb; border-radius:8px;
+  font-size:14px; font-family:inherit; outline:none; box-sizing:border-box;
+}
+.field textarea { height:72px; resize:vertical; }
+.field input:focus, .field textarea:focus { border-color:#f59e0b; box-shadow:0 0 0 3px rgba(245,158,11,.15); }
+.input-upi-set { border-color:#86efac!important; }
+.upi-set-hint  { font-size:11px; color:#15803d; margin-top:4px; }
+.form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+.qr-preview { text-align:center; }
+.qr-preview__text { font-size:13px; color:#6b7280; margin-bottom:12px; }
+.qr-preview__id   { margin-top:12px; font-size:13px; color:#6b7280; }
+.qr-preview__shop { margin-top:6px; font-size:12px; color:#6b7280; }
+.qr-preview__apps { margin-top:10px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.qr-preview__app-tag { background:#dcfce7; color:#15803d; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+.qr-preview__empty { text-align:center; padding:40px 20px; color:#9ca3af; }
+.qr-preview__empty-icon { font-size:48px; margin-bottom:10px; }
+
+.invoice-preview-banner { background:linear-gradient(135deg,#ff6b00,#f59e0b); border-radius:10px; padding:14px 18px; color:#fff; margin-bottom:12px; }
+.invoice-preview-banner__name    { font-size:16px; font-weight:800; }
+.invoice-preview-banner__addr    { font-size:11px; opacity:.85; margin-top:3px; }
+.invoice-preview-banner__contact { font-size:11px; opacity:.85; }
+.invoice-preview-banner__gst     { font-size:10px; opacity:.75; margin-top:2px; }
+.invoice-preview-caption { font-size:12px; color:#6b7280; text-align:center; }
+
+@media (max-width: 640px) {
+  .form-grid-2 { grid-template-columns: 1fr; gap: 8px; }
+}
+
+@media (max-width: 480px) {
+  .page-title { font-size: 18px; margin-bottom: 12px; }
+  .invoice-preview-banner { padding: 12px 14px; }
+  .invoice-preview-banner__name { font-size: 15px; }
+}
+

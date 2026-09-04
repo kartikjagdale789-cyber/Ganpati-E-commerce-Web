@@ -1,0 +1,4 @@
+.qrcode-wrapper { display:flex; flex-direction:column; align-items:center; max-width:100%; }
+.qrcode-img     { border:2px solid #fde68a; border-radius:8px; max-width:100%; height:auto; box-sizing:border-box; }
+.qrcode-label   { margin-top:6px; font-size:11px; color:#6b7280; font-weight:600; text-align:center; }
+

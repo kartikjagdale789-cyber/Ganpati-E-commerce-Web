@@ -1,0 +1,42 @@
+.dashboard-loading { text-align:center; padding:60px; color:#b45309; font-weight:700; font-size:16px; }
+.page-title { margin:0 0 18px; color:#92400e; font-size:20px; font-weight:800; }
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:22px; }
+.stat-card { border-radius:14px; padding:16px 18px; border:1px solid rgba(0,0,0,.05); }
+.stat-card__icon  { font-size:28px; margin-bottom:6px; }
+.stat-card__label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; opacity:.75; }
+.stat-card__value { font-size:24px; font-weight:800; margin-top:2px; }
+.stat-card__sub   { font-size:11px; opacity:.6; margin-top:2px; }
+.section-heading  { font-weight:800; color:#92400e; margin-bottom:14px; font-size:15px; }
+.empty-text       { color:#9ca3af; text-align:center; padding:20px 0; }
+.table-wrap        { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.data-table         { width:100%; border-collapse:collapse; font-size:13px; min-width:550px; }
+.data-table thead tr{ background:#fffbeb; }
+.data-table th      { padding:9px 12px; text-align:left; font-weight:700; color:#6b7280; font-size:11px; border-bottom:1px solid #f3f4f6; white-space:nowrap; }
+.data-table td       { padding:9px 12px; border-top:1px solid #f9fafb; }
+.cell-invoice { color:#f59e0b; font-weight:700; }
+.cell-muted   { color:#6b7280; }
+.cell-bold    { font-weight:700; }
+.cell-green   { color:#15803d; font-weight:700; }
+.cell-red     { color:#b91c1c; font-weight:700; }
+
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .stat-card { padding: 14px 14px; }
+  .stat-card__value { font-size: 20px; }
+  .page-title { font-size: 18px; margin-bottom: 14px; }
+}
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
+  .stat-card { padding: 12px 10px; border-radius: 10px; }
+  .stat-card__icon { font-size: 22px; margin-bottom: 4px; }
+  .stat-card__label { font-size: 10px; }
+  .stat-card__value { font-size: 17px; }
+  .stat-card__sub { font-size: 10px; }
+  .page-title { font-size: 17px; margin-bottom: 12px; }
+}
+
+@media (max-width: 340px) {
+  .stats-grid { grid-template-columns: 1fr; }
+}
+

@@ -1,0 +1,10 @@
+.layout       { font-family:'Segoe UI',system-ui,sans-serif; background:#fafaf8; min-height:100vh; overflow-x:hidden; }
+.layout__main { padding:20px; max-width:1400px; margin:0 auto; width:100%; box-sizing:border-box; }
+
+@media (max-width: 768px) {
+  .layout__main { padding: 14px 12px; }
+}
+
+@media (max-width: 480px) {
+  .layout__main { padding: 10px 8px; }
+}

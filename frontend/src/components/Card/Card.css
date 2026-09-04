@@ -1,0 +1,9 @@
+.card { background:#fff; border-radius:14px; border:1px solid #e5e7eb; padding:20px; box-sizing:border-box; max-width:100%; }
+
+@media (max-width: 768px) {
+  .card { padding: 16px; border-radius: 12px; }
+}
+
+@media (max-width: 480px) {
+  .card { padding: 14px 12px; border-radius: 10px; }
+}
