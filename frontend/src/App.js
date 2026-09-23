@@ -17,9 +17,9 @@ import Settings   from './pages/Settings/Settings';
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return (
-    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100vh', flexDirection:'column', gap:16 }}>
-      <div style={{ fontSize:48 }}>🙏</div>
-      <div style={{ color:'#b45309', fontWeight:700 }}>Loading...</div>
+    <div className="app-loading">
+      <div className="app-loading__mark">GB</div>
+      <div>Loading workspace...</div>
     </div>
   );
   return user ? children : <Navigate to="/login" replace />;

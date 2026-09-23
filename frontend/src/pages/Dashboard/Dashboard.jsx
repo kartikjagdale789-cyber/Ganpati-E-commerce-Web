@@ -32,23 +32,23 @@ const Dashboard = () => {
 
   if (!stats) return (
     <Layout dueCount={dueCount}>
-      <div className="dashboard-loading">🙏 Loading dashboard...</div>
+      <div className="dashboard-loading">Loading dashboard...</div>
     </Layout>
   );
 
   return (
     <Layout dueCount={dueCount}>
-      <h2 className="page-title">📊 Dashboard Overview</h2>
+      <h2 className="page-title">Dashboard Overview</h2>
 
       <div className="stats-grid">
         <StatCard label="Today's Sales"      val={stats.todaySales}          icon="📅" bg="#fff7ed" textColor="#c2410c" sub={fmt(stats.todayRevenue)} />
-        <StatCard label="Total Revenue"      val={fmt(stats.totalRevenue)}   icon="💰" bg="#dcfce7" textColor="#15803d" />
-        <StatCard label="Pending Amount"     val={fmt(stats.pendingAmount)}  icon="⏳" bg="#fef9c3" textColor="#92400e" sub={`${stats.pendingCustomers} invoices`} />
-        <StatCard label="Paid Invoices"      val={stats.paidInvoices}        icon="✅" bg="#dbeafe" textColor="#1e40af" sub="fully settled" />
-        <StatCard label="Total Customers"    val={stats.totalCustomers}      icon="👥" bg="#fce7f3" textColor="#9d174d" />
+        <StatCard label="Total Revenue"      val={fmt(stats.totalRevenue)}   icon="INR" bg="#dcfce7" textColor="#15803d" />
+        <StatCard label="Pending Amount"     val={fmt(stats.pendingAmount)}  icon="DUE" bg="#fef9c3" textColor="#92400e" sub={`${stats.pendingCustomers} invoices`} />
+        <StatCard label="Paid Invoices"      val={stats.paidInvoices}        icon="PAID" bg="#dbeafe" textColor="#1e40af" sub="fully settled" />
+        <StatCard label="Total Customers"    val={stats.totalCustomers}      icon="CRM" bg="#fce7f3" textColor="#9d174d" />
         <StatCard label="Pending Customers"  val={stats.pendingCustomers}    icon="🔴" bg="#fee2e2" textColor="#b91c1c" />
         <StatCard label="Out of Stock"       val={stats.outOfStock}          icon="📭" bg="#f3f4f6" textColor="#374151" />
-        <StatCard label="Low Stock"          val={stats.lowStock}            icon="⚠️" bg="#fef9c3" textColor="#854d0e" />
+        <StatCard label="Low Stock"          val={stats.lowStock}            icon="LOW" bg="#fef9c3" textColor="#854d0e" />
       </div>
 
       <Card>

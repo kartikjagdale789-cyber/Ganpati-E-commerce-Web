@@ -22,6 +22,25 @@ const paymentHistorySchema = new mongoose.Schema({
   paidAt       : { type: Date,   default: Date.now },
 }, { _id: false });
 
+const shopDetailsSchema = new mongoose.Schema({
+  shopName       : { type: String, default: '' },
+  shopLogo       : { type: String, default: '' },
+  headerBanner   : { type: String, default: '' },
+  shopAddress    : { type: String, default: '' },
+  address        : { type: String, default: '' },
+  mobileNumber   : { type: String, default: '' },
+  mobile         : { type: String, default: '' },
+  alternateMobile: { type: String, default: '' },
+  email          : { type: String, default: '' },
+  gstNumber      : { type: String, default: '' },
+  upiId          : { type: String, default: '' },
+  bankName       : { type: String, default: '' },
+  invoicePrefix  : { type: String, default: 'INV' },
+  footerMessage  : { type: String, default: '' },
+  instagram      : { type: String, default: '' },
+  qrLogo         : { type: String, default: '' },
+}, { _id: false });
+
 /* ── Main Invoice schema ───────────────────────────────────────────────────── */
 const invoiceSchema = new mongoose.Schema({
   invoiceNo     : { type: String, unique: true },
@@ -48,6 +67,9 @@ const invoiceSchema = new mongoose.Schema({
   paymentStatus : { type: String, enum: ['Paid','Partial Payment','Unpaid'], default: 'Unpaid' },
   paymentHistory: [paymentHistorySchema],
 
+  /* Shop Details Snapshot (Frozen at creation time) */
+  shopDetails: shopDetailsSchema,
+
   /* UPI */
   upiId     : { type: String, default: '' },
   upiQrData : { type: String, default: '' },
@@ -60,12 +82,20 @@ const invoiceSchema = new mongoose.Schema({
 /* ── Pre-save: auto IDs + payment status ─────────────────────────────────── */
 invoiceSchema.pre('save', async function (next) {
   if (!this.invoiceNo) {
+    let prefix = 'INV';
+    try {
+      const ShopSettings = mongoose.model('ShopSettings');
+      const settings = await ShopSettings.findOne();
+      if (settings?.invoicePrefix && settings.invoicePrefix.trim()) {
+        prefix = settings.invoicePrefix.trim();
+      }
+    } catch (_e) {}
     const year  = new Date().getFullYear();
     let count = await mongoose.model('Invoice').countDocuments();
-    let candidate = `INV-${year}-${String(count + 1).padStart(4, '0')}`;
+    let candidate = `${prefix}-${year}-${String(count + 1).padStart(4, '0')}`;
     while (await mongoose.model('Invoice').exists({ invoiceNo: candidate })) {
       count++;
-      candidate = `INV-${year}-${String(count + 1).padStart(4, '0')}`;
+      candidate = `${prefix}-${year}-${String(count + 1).padStart(4, '0')}`;
     }
     this.invoiceNo = candidate;
   }

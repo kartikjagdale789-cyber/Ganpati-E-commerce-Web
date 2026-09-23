@@ -15,7 +15,7 @@ exports.getAll = async (req, res) => {
     }
     const items = await Inventory.find(query).sort({ createdAt: -1 });
     res.json({ success: true, data: items });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Inventory could not be loaded' }); }
 };
 
 /* GET /api/inventory/:id */
@@ -24,7 +24,7 @@ exports.getOne = async (req, res) => {
     const item = await Inventory.findById(req.params.id);
     if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
     res.json({ success: true, data: item });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Inventory item could not be loaded' }); }
 };
 
 /* POST /api/inventory */
@@ -34,7 +34,7 @@ exports.create = async (req, res) => {
     if (req.file) data.image = `/uploads/${req.file.filename}`;
     const item = await Inventory.create(data);
     res.status(201).json({ success: true, data: item });
-  } catch (err) { res.status(400).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(400).json({ success: false, message: 'Inventory item could not be created' }); }
 };
 
 /* PUT /api/inventory/:id */
@@ -47,7 +47,7 @@ exports.update = async (req, res) => {
     const item = await Inventory.findByIdAndUpdate(req.params.id, data, { new: true, runValidators: true });
     if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
     res.json({ success: true, data: item });
-  } catch (err) { res.status(400).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(400).json({ success: false, message: 'Inventory item could not be updated' }); }
 };
 
 /* DELETE /api/inventory/:id  (soft delete) */
@@ -55,7 +55,7 @@ exports.remove = async (req, res) => {
   try {
     await Inventory.findByIdAndUpdate(req.params.id, { isActive: false });
     res.json({ success: true, message: 'Item deleted successfully' });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Inventory item could not be deleted' }); }
 };
 
 /* PATCH /api/inventory/:id/qty */
@@ -64,5 +64,5 @@ exports.updateQty = async (req, res) => {
     const item = await Inventory.findByIdAndUpdate(req.params.id, { qty: +req.body.qty }, { new: true });
     if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
     res.json({ success: true, data: item });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Inventory quantity could not be updated' }); }
 };

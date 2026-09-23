@@ -1,4 +1,4 @@
-# 🙏 Ganpati Inventory & Billing Management System — MERN Stack
+# Ganpati Inventory & Billing Management System — MERN Stack
 
 Professional MERN-stack conversion of the Ganpati Inventory & Billing system.
 **100% identical UI, features, and business logic** — only the architecture changed.
@@ -43,8 +43,10 @@ ganpati-mern/
 ```bash
 cd backend
 npm install
-npm run seed      # creates admin user + sample data
-npm run dev        # starts on http://localhost:5000
+copy .env.example .env
+# Fill every required value in .env before starting.
+npm run seed
+npm run dev
 ```
 
 ### 2. Frontend
@@ -54,27 +56,53 @@ npm install
 npm start           # starts on http://localhost:3000
 ```
 
-### 3. Login
-```
-Username: admin
-Password: ganpati123
-```
+### 3. First owner setup
+
+The seed command never creates credentials. The first owner must be created through the protected first-registration flow with a strong password. Subsequent registration is closed by the API.
 
 ## Environment Variables
 
-**backend/.env**
-```
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/ganpati_billing
-JWT_SECRET=your_secret_key
-JWT_EXPIRES_IN=7d
-FRONTEND_URL=http://localhost:3000
+Copy `backend/.env.example` to `backend/.env`. Required production values are `MONGODB_URI`, `JWT_SECRET` (minimum 64 characters), and `CLIENT_URL`. Multiple allowed client origins can be comma-separated in `CLIENT_URL`.
+
+Copy `frontend/.env.example` to `frontend/.env` and set `REACT_APP_API_URL` to the deployed API URL.
+
+Optional integrations use environment variables only: Sentry, Razorpay, SMTP, Cloudinary, and session configuration placeholders are included in `backend/.env.example`.
+
+## Production Deployment
+
+1. Provision MongoDB with authentication, backups, and network restrictions.
+2. Set production values from `backend/.env.example`; never commit `.env` files.
+3. Build the frontend with `npm run build` and serve `frontend/build` from a static host or Nginx.
+4. Start the API with PM2 from the repository root:
+
+```bash
+npm --prefix backend install --omit=dev
+pm2 start ecosystem.config.js
+pm2 save
+pm2 startup
 ```
 
-**frontend/.env**
+The API is HTTPS-ready behind a reverse proxy. Terminate TLS at Nginx, Apache, Render, Railway, or the selected hosting platform and proxy requests to the PM2 API port. Set `CLIENT_URL` to the HTTPS frontend origin only.
+
+## Backup and Restore
+
+MongoDB Database Tools (`mongodump` and `mongorestore`) must be installed on the deployment host.
+
+```bash
+cd backend
+npm run backup
+npm run restore -- ./backups/<timestamp>
 ```
-REACT_APP_API_URL=http://localhost:5000/api
-```
+
+Backups and application logs are excluded from Git. Schedule `npm run backup` using the host scheduler and store copies outside the application server.
+
+## Security Notes
+
+- Startup fails when `MONGODB_URI`, `JWT_SECRET`, or `CLIENT_URL` is missing; production JWT secrets must be at least 64 characters.
+- Helmet, compression, HPP, Mongo sanitization, XSS filtering, cookie parsing, CORS allowlisting, Zod validation, upload validation, and route-specific rate limits are enabled.
+- API errors return generic messages; detailed errors are written to `backend/logs/application.log` and optionally to Sentry.
+- Login, billing, invoice, and upload endpoints return HTTP 429 when rate limits are exceeded.
+- Create a database owner through the first-registration flow; no default credentials exist.
 
 ## Features (unchanged from original)
 - Dashboard with live stats

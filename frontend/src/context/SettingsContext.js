@@ -1,26 +1,95 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { settingsAPI } from '../api';
-
-const DEFAULT = {
-  shopName: 'Shri Ganesh Murti Bhandar',
-  shopAddress: 'Ganesh Nagar, Near Main Temple, Nagpur, Maharashtra - 440001',
-  mobile: '+91-9876543210', email: '', gstNumber: '', upiId: '',
-  bankName: 'State Bank of India', shopLogo: '', lowStockThreshold: 5,
-};
+import { useAuth } from './AuthContext';
+import SettingsAuthModal from '../components/SettingsAuthModal/SettingsAuthModal';
 
 const SettingsContext = createContext(null);
 
 export const SettingsProvider = ({ children }) => {
-  const [settings, setSettings] = useState(DEFAULT);
+  const { user } = useAuth();
+  const [settings, setSettings] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  const refresh = () =>
-    settingsAPI.get().then(res => setSettings(res.data)).catch(() => {});
+  // In-memory verification state (resets on browser refresh)
+  const [isSettingsVerified, setIsSettingsVerified] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  useEffect(() => { refresh(); }, []);
+  const successCbRef = useRef(null);
+  const cancelCbRef = useRef(null);
+
+  const refresh = useCallback(async () => {
+    try {
+      const res = await settingsAPI.get();
+      if (res && res.data) {
+        setSettings(res.data);
+        if (res.data.shopName) {
+          document.title = res.data.shopName;
+        }
+        return res.data;
+      }
+    } catch (err) {
+      console.error('Failed to load shop settings from MongoDB:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  const openSettingsModal = useCallback((onSuccess, onCancel) => {
+    if (user?.role === 'admin') {
+      setIsSettingsVerified(true);
+      if (onSuccess) onSuccess();
+      return;
+    }
+    successCbRef.current = onSuccess || null;
+    cancelCbRef.current = onCancel || null;
+    setIsAuthModalOpen(true);
+  }, [user]);
+
+  const closeSettingsModal = useCallback(() => {
+    setIsAuthModalOpen(false);
+    const onCancel = cancelCbRef.current;
+    successCbRef.current = null;
+    cancelCbRef.current = null;
+    if (onCancel) onCancel();
+  }, []);
+
+  const onAuthSuccess = useCallback(() => {
+    setIsSettingsVerified(true);
+    setIsAuthModalOpen(false);
+    const onSuccess = successCbRef.current;
+    successCbRef.current = null;
+    cancelCbRef.current = null;
+    if (onSuccess) onSuccess();
+  }, []);
+
+  const resetSettingsVerification = useCallback(() => {
+    setIsSettingsVerified(false);
+  }, []);
 
   return (
-    <SettingsContext.Provider value={{ settings, setSettings, refresh }}>
+    <SettingsContext.Provider
+      value={{
+        settings,
+        setSettings,
+        refresh,
+        loading,
+        isSettingsVerified,
+        setIsSettingsVerified,
+        resetSettingsVerification,
+        openSettingsModal,
+        closeSettingsModal,
+      }}
+    >
       {children}
+      <SettingsAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={closeSettingsModal}
+        onSuccess={onAuthSuccess}
+      />
     </SettingsContext.Provider>
   );
 };

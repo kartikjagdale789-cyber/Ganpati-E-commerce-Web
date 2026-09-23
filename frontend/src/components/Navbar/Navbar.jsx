@@ -5,19 +5,19 @@ import { useSettings } from '../../context/SettingsContext';
 import './Navbar.css';
 
 const NAV_ITEMS = [
-  { path: '/',          icon: '📊', label: 'Dashboard'  },
-  { path: '/inventory', icon: '📦', label: 'Inventory'  },
-  { path: '/billing',   icon: '🧾', label: 'Billing'    },
-  { path: '/sales',     icon: '📋', label: 'Sales'      },
-  { path: '/dues',      icon: '💰', label: 'Due List'   },
-  { path: '/reports',   icon: '📈', label: 'Reports'    },
-  { path: '/customers', icon: '👥', label: 'Customers'  },
-  { path: '/settings',  icon: '⚙️', label: 'Settings'   },
+  { path: '/', label: 'Dashboard' },
+  { path: '/inventory', label: 'Inventory' },
+  { path: '/billing', label: 'Billing' },
+  { path: '/sales', label: 'Sales' },
+  { path: '/dues', label: 'Due List' },
+  { path: '/reports', label: 'Reports' },
+  { path: '/customers', label: 'Customers' },
+  { path: '/settings', label: 'Settings' },
 ];
 
 const Navbar = ({ dueCount = 0 }) => {
-  const { logout, user } = useAuth();
-  const { settings } = useSettings();
+  const { user, logout } = useAuth();
+  const { settings, isSettingsVerified, openSettingsModal, resetSettingsVerification } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -44,8 +44,28 @@ const Navbar = ({ dueCount = 0 }) => {
     };
   }, [menuOpen]);
 
+  const handleNavClick = (path, e) => {
+    if (path === '/settings' && !isSettingsVerified) {
+      e.preventDefault();
+      openSettingsModal(() => {
+        navigate('/settings');
+      });
+    }
+  };
+
+  const handleDrawerNavClick = (path, e) => {
+    setMenuOpen(false);
+    if (path === '/settings' && !isSettingsVerified) {
+      e.preventDefault();
+      openSettingsModal(() => {
+        navigate('/settings');
+      });
+    }
+  };
+
   const handleLogout = () => {
     setMenuOpen(false);
+    if (resetSettingsVerification) resetSettingsVerification();
     logout();
     navigate('/login');
   };
@@ -56,7 +76,7 @@ const Navbar = ({ dueCount = 0 }) => {
         <div className="navbar__brand">
           {settings.shopLogo
             ? <img src={settings.shopLogo} alt="logo" className="navbar__logo-img" />
-            : <span className="navbar__logo-emoji">🙏</span>}
+            : <span className="navbar__logo-mark">GB</span>}
           <div className="navbar__brand-text">
             <div className="navbar__shop-name">{settings.shopName}</div>
             <div className="navbar__tagline">Inventory &amp; Billing System</div>
@@ -65,14 +85,14 @@ const Navbar = ({ dueCount = 0 }) => {
 
         {/* Desktop Links */}
         <div className="navbar__links">
-          {NAV_ITEMS.map(({ path, icon, label }) => (
+          {NAV_ITEMS.map(({ path, label }) => (
             <NavLink
               key={path}
               to={path}
               end={path === '/'}
+              onClick={(e) => handleNavClick(path, e)}
               className={({ isActive }) => `navbar__link${isActive ? ' navbar__link--active' : ''}`}
             >
-              <span>{icon}</span>
               <span className="navbar__link-label">{label}</span>
               {path === '/dues' && dueCount > 0 && (
                 <span className="navbar__badge">{dueCount}</span>
@@ -82,7 +102,7 @@ const Navbar = ({ dueCount = 0 }) => {
         </div>
 
         <div className="navbar__right">
-          <button className="navbar__logout" onClick={handleLogout} title="Logout">🚪</button>
+          <button className="navbar__logout" onClick={handleLogout} title="Logout">Logout</button>
           <button
             className={`navbar__hamburger${menuOpen ? ' navbar__hamburger--open' : ''}`}
             onClick={() => setMenuOpen(!menuOpen)}
@@ -103,27 +123,26 @@ const Navbar = ({ dueCount = 0 }) => {
               <div className="navbar__drawer-brand">
                 {settings.shopLogo
                   ? <img src={settings.shopLogo} alt="logo" className="navbar__drawer-logo" />
-                  : <span className="navbar__drawer-emoji">🙏</span>}
+                  : <span className="navbar__drawer-mark">GB</span>}
                 <div>
                   <div className="navbar__drawer-shop">{settings.shopName}</div>
-                  <div className="navbar__drawer-user">{user?.name ? `👤 ${user.name}` : 'Shop Admin'}</div>
+                  <div className="navbar__drawer-user">{user?.name || 'Shop Admin'}</div>
                 </div>
               </div>
               <button className="navbar__drawer-close" onClick={() => setMenuOpen(false)}>✕</button>
             </div>
 
             <div className="navbar__drawer-links">
-              {NAV_ITEMS.map(({ path, icon, label }) => (
+              {NAV_ITEMS.map(({ path, label }) => (
                 <NavLink
                   key={path}
                   to={path}
                   end={path === '/'}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={(e) => handleDrawerNavClick(path, e)}
                   className={({ isActive }) =>
                     `navbar__drawer-link${isActive ? ' navbar__drawer-link--active' : ''}`
                   }
                 >
-                  <span className="navbar__drawer-icon">{icon}</span>
                   <span className="navbar__drawer-text">{label}</span>
                   {path === '/dues' && dueCount > 0 && (
                     <span className="navbar__drawer-badge">{dueCount} due</span>
@@ -134,7 +153,6 @@ const Navbar = ({ dueCount = 0 }) => {
 
             <div className="navbar__drawer-footer">
               <button className="navbar__drawer-logout" onClick={handleLogout}>
-                <span>🚪</span>
                 <span>Logout</span>
               </button>
             </div>

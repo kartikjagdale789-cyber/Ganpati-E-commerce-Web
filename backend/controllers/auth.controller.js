@@ -1,5 +1,6 @@
 const jwt  = require('jsonwebtoken');
 const User = require('../models/User.model');
+const logger = require('../utils/logger');
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
@@ -16,9 +17,11 @@ exports.login = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid username or password' });
 
     const token = signToken(user._id);
+    logger.info({ userId: user._id.toString() }, 'Authentication succeeded');
     res.json({ success: true, token, user: { id: user._id, username: user.username, name: user.name, role: user.role } });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    logger.warn({ err }, 'Authentication request failed');
+    res.status(500).json({ success: false, message: 'Authentication could not be completed' });
   }
 };
 
@@ -32,7 +35,7 @@ exports.register = async (req, res) => {
     const token = signToken(user._id);
     res.status(201).json({ success: true, token, user: { id: user._id, username: user.username, role: user.role } });
   } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
+    res.status(400).json({ success: false, message: 'Registration could not be completed' });
   }
 };
 

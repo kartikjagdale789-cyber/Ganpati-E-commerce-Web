@@ -4,6 +4,7 @@ const Inventory   = require('../models/Inventory.model');
 const Customer    = require('../models/Customer.model');
 const ShopSettings = require('../models/ShopSettings.model');
 const { buildUPIString } = require('../utils/upi.util');
+const logger = require('../utils/logger');
 
 /* GET /api/invoices */
 exports.getAll = async (req, res) => {
@@ -25,7 +26,7 @@ exports.getAll = async (req, res) => {
       Invoice.countDocuments(query),
     ]);
     res.json({ success: true, data: invoices, total, page: +page });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Invoices could not be loaded' }); }
 };
 
 /* GET /api/invoices/dues */
@@ -33,7 +34,7 @@ exports.getDues = async (req, res) => {
   try {
     const dues = await Invoice.find({ remainingAmount: { $gt: 0 } }).sort({ createdAt: -1 });
     res.json({ success: true, data: dues });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Due invoices could not be loaded' }); }
 };
 
 /* GET /api/invoices/:id */
@@ -42,7 +43,7 @@ exports.getOne = async (req, res) => {
     const invoice = await Invoice.findById(req.params.id).populate('customer');
     if (!invoice) return res.status(404).json({ success: false, message: 'Invoice not found' });
     res.json({ success: true, data: invoice });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Invoice could not be loaded' }); }
 };
 
 /* POST /api/invoices */
@@ -91,6 +92,25 @@ exports.create = async (req, res) => {
       });
     }
 
+    const shopDetails = settings ? {
+      shopName       : settings.shopName || '',
+      shopLogo       : settings.shopLogo || '',
+      headerBanner   : settings.headerBanner || '',
+      shopAddress    : settings.shopAddress || settings.address || '',
+      address        : settings.address || settings.shopAddress || '',
+      mobileNumber   : settings.mobileNumber || settings.mobile || '',
+      mobile         : settings.mobile || settings.mobileNumber || '',
+      alternateMobile: settings.alternateMobile || '',
+      email          : settings.email || '',
+      gstNumber      : settings.gstNumber || '',
+      upiId          : settings.upiId || '',
+      bankName       : settings.bankName || '',
+      invoicePrefix  : settings.invoicePrefix || 'INV',
+      footerMessage  : settings.footerMessage || '',
+      instagram      : settings.instagram || '',
+      qrLogo         : settings.qrLogo || '',
+    } : {};
+
     const invoice = await Invoice.create({
       customer: customer._id,
       customerName: customerName.trim(),
@@ -103,6 +123,7 @@ exports.create = async (req, res) => {
       paidAmount: paid,
       paymentMethod: paymentMethod || 'Cash',
       notes: notes || '',
+      shopDetails,
       upiId: settings?.upiId || '',
       upiQrData: upiString,
       upiQrImage,
@@ -128,8 +149,10 @@ exports.create = async (req, res) => {
       $inc: { totalPurchases: 1, totalAmount: totalAmount, totalDue: totalAmount - paid },
     });
 
+    logger.info({ invoiceId: invoice._id.toString(), totalAmount, paymentMethod }, 'Invoice generated');
+
     res.status(201).json({ success: true, data: invoice });
-  } catch (err) { res.status(400).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(400).json({ success: false, message: 'Invoice could not be created' }); }
 };
 
 /* POST /api/invoices/:id/payment  — receive remaining */
@@ -144,10 +167,13 @@ exports.receivePayment = async (req, res) => {
     invoice.remainingAmount -= payAmt;
     invoice.paymentHistory.push({ amount: payAmt, method: method || 'Cash', transactionId, note });
 
-    /* Regenerate QR for remaining */
+    /* Regenerate QR for remaining using frozen invoice shop details if available, else latest settings */
     const settings = await ShopSettings.findOne();
-    if (settings?.upiId && invoice.remainingAmount > 0) {
-      const upiStr = buildUPIString(settings.upiId, settings.shopName, invoice.remainingAmount, invoice.invoiceNo, invoice.customerName);
+    const upiId = invoice.shopDetails?.upiId || settings?.upiId;
+    const shopName = invoice.shopDetails?.shopName || settings?.shopName;
+
+    if (upiId && invoice.remainingAmount > 0) {
+      const upiStr = buildUPIString(upiId, shopName, invoice.remainingAmount, invoice.invoiceNo, invoice.customerName);
       invoice.upiQrData  = upiStr;
       invoice.upiQrImage = await QRCode.toDataURL(upiStr, { width: 256, margin: 2 });
     } else {
@@ -158,9 +184,11 @@ exports.receivePayment = async (req, res) => {
     await invoice.save();
     await Customer.findByIdAndUpdate(invoice.customer, { $inc: { totalDue: -payAmt } });
 
+    logger.info({ invoiceId: invoice._id.toString(), amount: payAmt, method }, 'Payment received');
+
     const msg = invoice.paymentStatus === 'Paid'
       ? 'Payment complete! ✅'
       : `₹${payAmt} received. Remaining: ₹${invoice.remainingAmount}`;
     res.json({ success: true, data: invoice, message: msg });
-  } catch (err) { res.status(400).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(400).json({ success: false, message: 'Payment could not be recorded' }); }
 };

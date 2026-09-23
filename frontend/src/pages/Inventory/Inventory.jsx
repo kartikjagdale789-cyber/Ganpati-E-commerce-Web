@@ -10,7 +10,7 @@ import { fmt } from '../../utils/format';
 import './Inventory.css';
 
 const GanpatiForm = ({ initial, onSave, onClose }) => {
-  const [f, setF] = useState(initial || { name: '', type: '', height: '', color: '', price: '', qty: '', emoji: '🙏', description: '' });
+  const [f, setF] = useState(initial || { name: '', type: '', height: '', color: '', price: '', qty: '', emoji: '', description: '' });
   const set = (k) => (e) => setF(x => ({ ...x, [k]: e.target.value }));
   return (
     <div>
@@ -21,7 +21,7 @@ const GanpatiForm = ({ initial, onSave, onClose }) => {
         <div className="field"><label>Color</label><input value={f.color} onChange={set('color')} placeholder="Natural White" /></div>
         <div className="field"><label>Price (₹)</label><input type="number" value={f.price} onChange={set('price')} placeholder="1200" /></div>
         <div className="field"><label>Quantity</label><input type="number" value={f.qty} onChange={set('qty')} placeholder="10" /></div>
-        <div className="field"><label>Icon / Emoji</label><input value={f.emoji} onChange={set('emoji')} placeholder="🙏" /></div>
+        <div className="field"><label>Reference icon (optional)</label><input value={f.emoji} onChange={set('emoji')} placeholder="Optional" /></div>
       </div>
       <div className="field"><label>Description</label><textarea value={f.description} onChange={set('description')} /></div>
       <div className="form-actions">
@@ -29,7 +29,7 @@ const GanpatiForm = ({ initial, onSave, onClose }) => {
         <Button onClick={() => {
           if (!f.name || !f.price || !f.qty) return alert('Fill required fields');
           onSave({ ...f, price: +f.price, qty: +f.qty });
-        }}>💾 Save Ganpati</Button>
+        }}>Save Product</Button>
       </div>
     </div>
   );
@@ -87,8 +87,8 @@ const Inventory = () => {
   return (
     <Layout dueCount={dueCount}>
       <div className="page-header">
-        <h2 className="page-title">📦 Inventory Management</h2>
-        <Button onClick={() => setShowAdd(true)}>➕ Add New Ganpati</Button>
+        <h2 className="page-title">Inventory Management</h2>
+        <Button onClick={() => setShowAdd(true)}>Add New Product</Button>
       </div>
 
       <Card style={{ marginBottom: 16, padding: 14 }}>
@@ -109,7 +109,7 @@ const Inventory = () => {
           <tbody>
             {filtered.map((g, i) => (
               <tr key={g._id} style={{ background: i % 2 === 0 ? '#fff' : '#fffbf0' }}>
-                <td className="cell-emoji">{g.emoji}</td>
+                    <td className="cell-emoji">{g.emoji || '—'}</td>
                 <td className="cell-id">{g.ganpatiId}</td>
                 <td className="cell-bold">{g.name}</td>
                 <td>{g.type}</td>
@@ -120,8 +120,8 @@ const Inventory = () => {
                 <td><StockBadge qty={g.qty} /></td>
                 <td>
                   <div className="row-actions">
-                    <Button variant="info" small onClick={() => setEditItem(g)}>✏️</Button>
-                    <Button variant="danger" small onClick={() => setDelId(g._id)}>🗑️</Button>
+                    <Button variant="info" small onClick={() => setEditItem(g)}>Edit</Button>
+                    <Button variant="danger" small onClick={() => setDelId(g._id)}>Delete</Button>
                   </div>
                 </td>
               </tr>
@@ -131,14 +131,14 @@ const Inventory = () => {
         </table>
       </div>
 
-      {showAdd && <Modal title="➕ Add New Ganpati Idol" onClose={() => setShowAdd(false)} wide><GanpatiForm onSave={addItem} onClose={() => setShowAdd(false)} /></Modal>}
-      {editItem && <Modal title="✏️ Edit Ganpati Idol" onClose={() => setEditItem(null)} wide><GanpatiForm initial={editItem} onSave={saveEdit} onClose={() => setEditItem(null)} /></Modal>}
+      {showAdd && <Modal title="Add New Product" onClose={() => setShowAdd(false)} wide><GanpatiForm onSave={addItem} onClose={() => setShowAdd(false)} /></Modal>}
+      {editItem && <Modal title="Edit Product" onClose={() => setEditItem(null)} wide><GanpatiForm initial={editItem} onSave={saveEdit} onClose={() => setEditItem(null)} /></Modal>}
       {delId && (
-        <Modal title="🗑️ Confirm Delete" onClose={() => setDelId(null)}>
+        <Modal title="Confirm Delete" onClose={() => setDelId(null)}>
           <p style={{ color: '#374151', marginBottom: 20 }}>Delete this Ganpati idol? This cannot be undone.</p>
           <div className="form-actions">
             <Button variant="secondary" onClick={() => setDelId(null)}>Cancel</Button>
-            <Button variant="danger" onClick={() => deleteItem(delId)}>🗑️ Delete</Button>
+            <Button variant="danger" onClick={() => deleteItem(delId)}>Delete</Button>
           </div>
         </Modal>
       )}

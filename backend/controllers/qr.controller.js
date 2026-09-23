@@ -13,5 +13,5 @@ exports.generate = async (req, res) => {
     const upiString  = buildUPIString(settings.upiId, settings.shopName, amount, invoiceNo, customerName);
     const qrImage    = await QRCode.toDataURL(upiString, { width: 300, margin: 2, color: { dark: '#1a1a1a', light: '#ffffff' } });
     res.json({ success: true, qrImage, upiString, upiId: settings.upiId, shopName: settings.shopName });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'QR code could not be generated' }); }
 };

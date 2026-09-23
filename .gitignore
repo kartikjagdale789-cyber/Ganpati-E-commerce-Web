@@ -1,8 +1,14 @@
 node_modules/
 .env
+.env.local
+.env.*.local
 build/
 dist/
 uploads/*
 !uploads/.gitkeep
+logs/*
+!logs/.gitkeep
+backups/*
+!backups/.gitkeep
 .DS_Store
 npm-debug.log*

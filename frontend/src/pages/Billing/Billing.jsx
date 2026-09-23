@@ -43,7 +43,7 @@ const UPIPaymentPanel = ({ settings, paid, invoiceNo, customerName, onConfirm, c
   if (!isUpiSet) {
     return (
       <div className="upi-panel upi-panel--warning">
-        <div className="upi-panel__warn-icon">⚠️</div>
+        <div className="upi-panel__warn-icon">!</div>
         <div className="upi-panel__warn-title">UPI ID Not Configured</div>
         <div className="upi-panel__warn-text">Go to Settings → Banking &amp; UPI and add your UPI ID to enable QR payments.</div>
         <div className="upi-panel__warn-hint">e.g. yourshop@paytm • yourname@upi • number@ybl</div>
@@ -54,7 +54,7 @@ const UPIPaymentPanel = ({ settings, paid, invoiceNo, customerName, onConfirm, c
   return (
     <div className="upi-panel">
       <div className="upi-panel__header">
-        <span className="upi-panel__header-icon">📱</span>
+        <span className="upi-panel__header-icon">UPI</span>
         <div>
           <div className="upi-panel__header-title">UPI Payment</div>
           <div className="upi-panel__header-sub">Scan QR or tap Open in UPI App</div>
@@ -65,7 +65,7 @@ const UPIPaymentPanel = ({ settings, paid, invoiceNo, customerName, onConfirm, c
       <div className="upi-panel__body">
         {paid <= 0 ? (
           <div className="upi-panel__empty">
-            <div className="upi-panel__empty-icon">💰</div>
+            <div className="upi-panel__empty-icon">INR</div>
             <div>Enter a Paid Amount above to generate the QR</div>
           </div>
         ) : (
@@ -79,7 +79,7 @@ const UPIPaymentPanel = ({ settings, paid, invoiceNo, customerName, onConfirm, c
             </div>
 
             <div className="upi-panel__apps">
-              {[['📱','PhonePe','#5f259f'],['🟢','GPay','#1a73e8'],['💙','Paytm','#002970'],['🇮🇳','BHIM','#138808']].map(([ic, lbl, clr]) => (
+              {[['P','PhonePe','#5f259f'],['G','GPay','#1a73e8'],['P','Paytm','#002970'],['B','BHIM','#138808']].map(([ic, lbl, clr]) => (
                 <div key={lbl} className="upi-panel__app">
                   <div className="upi-panel__app-icon" style={{ background: clr }}>{ic}</div>
                   <div className="upi-panel__app-label">{lbl}</div>
@@ -93,7 +93,7 @@ const UPIPaymentPanel = ({ settings, paid, invoiceNo, customerName, onConfirm, c
                 <div className="upi-panel__id-value">{settings.upiId}</div>
               </div>
               <button className={`upi-panel__copy-btn${copied ? ' upi-panel__copy-btn--copied' : ''}`} onClick={copyUpiId}>
-                {copied ? '✅ Copied!' : '📋 Copy'}
+                {copied ? 'Copied' : 'Copy UPI ID'}
               </button>
             </div>
 
@@ -109,7 +109,7 @@ const UPIPaymentPanel = ({ settings, paid, invoiceNo, customerName, onConfirm, c
             </div>
 
             <button className="upi-panel__open-btn" onClick={openUpiApp}>
-              📲 Open in UPI App <span>→ PhonePe / GPay / Paytm</span>
+              Open in UPI App <span>PhonePe / GPay / Paytm</span>
             </button>
           </>
         )}
@@ -126,16 +126,16 @@ const UPIPaymentPanel = ({ settings, paid, invoiceNo, customerName, onConfirm, c
                 if (!ok) setConfirmed(false);
               }}
             >
-              ✅ I Have Received Payment — Generate Invoice
+              Confirm Payment and Generate Invoice
             </button>
           ) : (
             <div className="upi-panel__confirmed">
-              <div className="upi-panel__confirmed-icon">🎉</div>
+              <div className="upi-panel__confirmed-icon">OK</div>
               <div className="upi-panel__confirmed-title">Payment Confirmed!</div>
               <div className="upi-panel__confirmed-sub">Invoice is being generated...</div>
             </div>
           )}
-          {!canConfirm && paid > 0 && <div className="upi-panel__confirm-hint">⬆ Fill customer name &amp; add items first</div>}
+          {!canConfirm && paid > 0 && <div className="upi-panel__confirm-hint">Fill customer name and add items first</div>}
         </div>
       </div>
     </div>
@@ -259,7 +259,7 @@ const Billing = () => {
       inventoryAPI.getAll().then(r => setInventory(r.data));
       invoiceAPI.getDues().then(r => setDueCount((r.data || []).length)).catch(() => {});
 
-      printInvoice(invoiceData, settings);
+      printInvoice(invoiceData, invoiceData.shopDetails || settings);
       return true;
     } catch (err) {
       toast.toast(err.message || 'Failed to generate invoice', 'error');
@@ -274,14 +274,14 @@ const Billing = () => {
 
   return (
     <Layout dueCount={dueCount}>
-      <h2 className="page-title">🧾 New Billing &amp; Invoice</h2>
+      <h2 className="page-title">New Billing &amp; Invoice</h2>
 
       {generatedInvoice ? (
         <div className="billing-grid">
           <div>
             <Card>
               <div className="success-header">
-                <div className="success-icon">✅</div>
+                <div className="success-icon">OK</div>
                 <div>
                   <div className="success-title">Invoice Generated!</div>
                   <div className="success-sub">{generatedInvoice.invoiceNo} • {new Date(generatedInvoice.invoiceDate).toLocaleString('en-IN')}</div>
@@ -289,8 +289,8 @@ const Billing = () => {
               </div>
 
               <div className="shop-banner">
-                <div className="shop-banner__name">🙏 {settings.shopName}</div>
-                <div className="shop-banner__addr">{settings.shopAddress}</div>
+                <div className="shop-banner__name">{generatedInvoice.shopDetails?.shopName || settings.shopName}</div>
+                <div className="shop-banner__addr">{generatedInvoice.shopDetails?.shopAddress || generatedInvoice.shopDetails?.address || settings.shopAddress || settings.address}</div>
               </div>
 
               <div className="detail-grid">
@@ -307,8 +307,8 @@ const Billing = () => {
 
               <div className="amount-summary">
                 {[['Total Amount', generatedInvoice.totalAmount, '#374151', true],
-                  ['✅ Paid Amount', generatedInvoice.paidAmount, '#15803d', false],
-                  [generatedInvoice.remainingAmount > 0 ? '⚠️ Remaining' : '✅ Remaining', generatedInvoice.remainingAmount, generatedInvoice.remainingAmount > 0 ? '#b91c1c' : '#15803d', false]]
+                  ['Paid Amount', generatedInvoice.paidAmount, '#15803d', false],
+                  ['Remaining', generatedInvoice.remainingAmount, generatedInvoice.remainingAmount > 0 ? '#b91c1c' : '#15803d', false]]
                   .map(([l, v, c, bold]) => (
                     <div key={l} className={`amount-row${bold ? ' amount-row--bold' : ''}`} style={{ color: c }}>
                       <span>{l}</span><span>{fmt(v)}</span>
@@ -318,10 +318,10 @@ const Billing = () => {
               </div>
 
               <div className="action-row">
-                <Button onClick={() => printInvoice(generatedInvoice, settings)} full>🖨️ Print / PDF</Button>
-                <Button variant="info" full onClick={() => setViewModal(true)}>👁️ View Invoice</Button>
+                <Button onClick={() => printInvoice(generatedInvoice, generatedInvoice.shopDetails || settings)} full>Print / PDF</Button>
+                <Button variant="info" full onClick={() => setViewModal(true)}>View Invoice</Button>
               </div>
-              <Button variant="ghost" onClick={resetBill} full style={{ marginTop: 8 }}>➕ New Bill</Button>
+              <Button variant="ghost" onClick={resetBill} full style={{ marginTop: 8 }}>New Bill</Button>
             </Card>
           </div>
 
@@ -329,7 +329,7 @@ const Billing = () => {
             {generatedInvoice.upiQrData ? (
               <div className="upi-panel upi-panel--success">
                 <div className="upi-panel__header upi-panel__header--success">
-                  <span className="upi-panel__header-icon">✅</span>
+                  <span className="upi-panel__header-icon">UPI</span>
                   <div>
                     <div className="upi-panel__header-title">Payment QR — {generatedInvoice.invoiceNo}</div>
                     <div className="upi-panel__header-sub">Share this QR with the customer</div>
@@ -345,7 +345,7 @@ const Billing = () => {
                     </div>
                   </div>
                   <div className="upi-panel__apps">
-                    {[['📱','PhonePe','#5f259f'],['🟢','GPay','#1a73e8'],['💙','Paytm','#002970'],['🇮🇳','BHIM','#138808']].map(([ic, lbl, clr]) => (
+                    {[['P','PhonePe','#5f259f'],['G','GPay','#1a73e8'],['P','Paytm','#002970'],['B','BHIM','#138808']].map(([ic, lbl, clr]) => (
                       <div key={lbl} className="upi-panel__app">
                         <div className="upi-panel__app-icon" style={{ background: clr }}>{ic}</div>
                         <div className="upi-panel__app-label">{lbl}</div>
@@ -358,12 +358,12 @@ const Billing = () => {
                       <div className="upi-panel__id-value">{settings.upiId}</div>
                     </div>
                   </div>
-                  <button className="upi-panel__open-btn" onClick={() => { window.location.href = generatedInvoice.upiQrData; }}>📲 Open in UPI App</button>
+                  <button className="upi-panel__open-btn" onClick={() => { window.location.href = generatedInvoice.upiQrData; }}>Open in UPI App</button>
                 </div>
               </div>
             ) : (
               <Card style={{ textAlign: 'center', padding: '40px 20px' }}>
-                <div style={{ fontSize: 48, marginBottom: 12 }}>💵</div>
+                <div className="payment-method-mark">CASH</div>
                 <div style={{ fontWeight: 700, color: '#374151', marginBottom: 6 }}>Cash / Card Payment</div>
                 <div style={{ fontSize: 13, color: '#6b7280' }}>No UPI QR generated for this payment method.</div>
               </Card>
@@ -374,7 +374,7 @@ const Billing = () => {
         <div className="billing-grid">
           <div>
             <Card style={{ marginBottom: 14 }}>
-              <div className="section-heading">👤 Customer Details</div>
+              <div className="section-heading">Customer Details</div>
               <div className="form-grid-2">
                 <div className="field"><label>Customer Name *</label><input value={form.customerName} onChange={e => setForm(f => ({ ...f, customerName: e.target.value }))} placeholder="Full name" /></div>
                 <div className="field"><label>Mobile Number</label><input value={form.customerMobile} onChange={e => setForm(f => ({ ...f, customerMobile: e.target.value }))} placeholder="+91-XXXXXXXXXX" /></div>
@@ -383,17 +383,17 @@ const Billing = () => {
             </Card>
 
             <Card style={{ marginBottom: 14 }}>
-              <div className="section-heading">🛒 Add Items to Cart</div>
+              <div className="section-heading">Add Items to Cart</div>
               <div className="cart-add-row">
                 <select value={selectedG} onChange={e => setSelectedG(e.target.value)}>
                   <option value="">-- Select Ganpati --</option>
                   {inventory.filter(g => g.qty > 0).map(g => (
-                    <option key={g._id} value={g._id}>{g.emoji} {g.name} ({g.type}) — {fmt(g.price)} | Stock: {g.qty}</option>
+                    <option key={g._id} value={g._id}>{g.name} ({g.type}) — {fmt(g.price)} | Stock: {g.qty}</option>
                   ))}
                 </select>
                 <input type="number" min={1} value={selectedQty} onChange={e => setSelectedQty(+e.target.value)} />
               </div>
-              <Button onClick={addToCart} full>➕ Add to Cart</Button>
+              <Button onClick={addToCart} full>Add to Cart</Button>
 
               {cartItems.length > 0 && (
                 <table className="cart-table">
@@ -401,7 +401,7 @@ const Billing = () => {
                   <tbody>
                     {cartItems.map((item, i) => (
                       <tr key={i}>
-                        <td><div className="cart-item-name">{item.emoji} {item.name}</div><div className="cart-item-type">{item.type}</div></td>
+                        <td><div className="cart-item-name">{item.name}</div><div className="cart-item-type">{item.type}</div></td>
                         <td>{item.qty}</td>
                         <td>{fmt(item.unitPrice)}</td>
                         <td className="cell-green cell-bold">{fmt(item.totalPrice)}</td>
@@ -414,13 +414,13 @@ const Billing = () => {
             </Card>
 
             <Card>
-              <div className="section-heading">💳 Payment Details</div>
+              <div className="section-heading">Payment Details</div>
               <div className="field">
                 <label>Payment Method</label>
                 <div className="method-tabs">
                   {['Cash','UPI','Card','Bank Transfer','Cheque'].map(m => (
                     <button key={m} className={`method-tab${form.paymentMethod === m ? ` method-tab--active${m === 'UPI' ? ' method-tab--upi' : ''}` : ''}`} onClick={() => setPayMethod(m)}>
-                      {m === 'Cash' ? '💵' : m === 'UPI' ? '📱' : m === 'Card' ? '💳' : m === 'Bank Transfer' ? '🏦' : '📄'}<br />{m}
+                      {m}<br />Select
                     </button>
                   ))}
                 </div>
@@ -436,7 +436,7 @@ const Billing = () => {
                   onChange={e => setForm(f => ({ ...f, paidAmount: Math.min(+e.target.value, totalAmount) }))}
                   readOnly={isUPI}
                 />
-                {isUPI && <div className="upi-hint">📱 Amount auto-filled for UPI QR. Edit above if partial.</div>}
+                {isUPI && <div className="upi-hint">Amount auto-filled for UPI QR. Edit above if partial.</div>}
               </div>
 
               <div className="amount-boxes">
@@ -453,7 +453,7 @@ const Billing = () => {
 
               {!isUPI && (
                 <>
-                  <Button onClick={doGenerate} full>🧾 Generate Invoice</Button>
+                  <Button onClick={doGenerate} full>Generate Invoice</Button>
                   {!canGenerate && <div className="disabled-hint">Add items + enter customer name to continue</div>}
                 </>
               )}
@@ -466,7 +466,7 @@ const Billing = () => {
                 <UPIPaymentPanel settings={settings} paid={paid} invoiceNo={null} customerName={form.customerName} canConfirm={canGenerate} onConfirm={doGenerate} />
                 {cartItems.length > 0 && (
                   <Card style={{ marginTop: 14 }}>
-                    <div className="section-heading" style={{ fontSize: 13 }}>💰 Adjust UPI Payment Amount</div>
+                    <div className="section-heading" style={{ fontSize: 13 }}>Adjust UPI Payment Amount</div>
                     <div className="field"><label>Paid Amount (₹) — Max: {fmt(totalAmount)}</label>
                       <input className="input-upi-border" type="number" min={0} max={totalAmount} value={form.paidAmount} onChange={e => setForm(f => ({ ...f, paidAmount: Math.min(+e.target.value, totalAmount) }))} />
                     </div>
@@ -479,18 +479,18 @@ const Billing = () => {
               </>
             ) : (
               <Card>
-                <div className="section-heading">📋 Invoice Preview</div>
+                <div className="section-heading">Invoice Preview</div>
                 <div className="shop-banner">
-                  <div className="shop-banner__name">🙏 {settings.shopName}</div>
+                  <div className="shop-banner__name">{settings.shopName}</div>
                   <div className="shop-banner__addr">{settings.shopAddress}</div>
                 </div>
-                {form.customerName && <div className="preview-customer"><strong>Customer:</strong> {form.customerName}{form.customerMobile && <span> | 📞 {form.customerMobile}</span>}</div>}
+                {form.customerName && <div className="preview-customer"><strong>Customer:</strong> {form.customerName}{form.customerMobile && <span> | {form.customerMobile}</span>}</div>}
                 {cartItems.length > 0 ? (
                   <>
                     <table className="cart-table">
                       <thead><tr>{['Item','Qty','Total'].map(h => <th key={h}>{h}</th>)}</tr></thead>
                       <tbody>{cartItems.map((item, i) => (
-                        <tr key={i}><td>{item.emoji} {item.name}</td><td>{item.qty}</td><td className="cell-green cell-bold">{fmt(item.totalPrice)}</td></tr>
+                        <tr key={i}><td>{item.name}</td><td>{item.qty}</td><td className="cell-green cell-bold">{fmt(item.totalPrice)}</td></tr>
                       ))}</tbody>
                     </table>
                     <div className="amount-summary">
@@ -503,7 +503,7 @@ const Billing = () => {
                     </div>
                   </>
                 ) : (
-                  <div className="empty-cart"><div className="empty-cart__icon">🛒</div><div>Add items to see invoice preview</div></div>
+                  <div className="empty-cart"><div className="empty-cart__icon">CART</div><div>Add items to see invoice preview</div></div>
                 )}
               </Card>
             )}
@@ -511,8 +511,8 @@ const Billing = () => {
         </div>
       )}
       {viewModal && generatedInvoice && (
-        <Modal title={`🧾 Invoice — ${generatedInvoice.invoiceNo}`} onClose={() => setViewModal(false)} xlarge>
-          <Invoice invoice={generatedInvoice} settings={settings} onClose={() => setViewModal(false)} />
+        <Modal title={`Invoice — ${generatedInvoice.invoiceNo}`} onClose={() => setViewModal(false)} xlarge>
+          <Invoice invoice={generatedInvoice} settings={generatedInvoice.shopDetails || settings} onClose={() => setViewModal(false)} />
         </Modal>
       )}
     </Layout>

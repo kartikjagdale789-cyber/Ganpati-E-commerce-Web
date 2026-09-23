@@ -36,28 +36,28 @@ const Reports = () => {
 
   return (
     <Layout dueCount={dueCount}>
-      <h2 className="page-title">📈 Reports &amp; Analytics</h2>
+      <h2 className="page-title">Reports &amp; Analytics</h2>
 
       <div className="rpt-tabs">
-        {[['daily','📅','Daily'],['weekly','📆','Weekly'],['monthly','🗓️','Monthly'],['all','📋','All Time']].map(([id, ic, lbl]) => (
-          <Button key={id} variant={rType === id ? 'primary' : 'ghost'} onClick={() => setRType(id)}>{ic} {lbl}</Button>
+        {[['daily','Daily'],['weekly','Weekly'],['monthly','Monthly'],['all','All Time']].map(([id, lbl]) => (
+          <Button key={id} variant={rType === id ? 'primary' : 'ghost'} onClick={() => setRType(id)}>{lbl}</Button>
         ))}
       </div>
 
       <div className="rpt-stats-grid">
-        <StatCard label="Orders"    val={stats.count || 0}            icon="🛒" bg="#dbeafe" textColor="#1e40af" />
-        <StatCard label="Revenue"   val={fmt(stats.totalRevenue)}     icon="💰" bg="#dcfce7" textColor="#15803d" />
-        <StatCard label="Collected" val={fmt(stats.totalPaid)}        icon="✅" bg="#d1fae5" textColor="#065f46" />
-        <StatCard label="Pending"   val={fmt(stats.totalDue)}         icon="⏳" bg="#fef9c3" textColor="#92400e" />
+        <StatCard label="Orders"    val={stats.count || 0}            icon="ORD" bg="#dbeafe" textColor="#1e40af" />
+        <StatCard label="Revenue"   val={fmt(stats.totalRevenue)}     icon="INR" bg="#dcfce7" textColor="#15803d" />
+        <StatCard label="Collected" val={fmt(stats.totalPaid)}        icon="PAID" bg="#d1fae5" textColor="#065f46" />
+        <StatCard label="Pending"   val={fmt(stats.totalDue)}         icon="DUE" bg="#fef9c3" textColor="#92400e" />
       </div>
 
       <div className="rpt-grid">
         <Card>
-          <div className="section-heading">🏆 Best Selling Ganpati</div>
+          <div className="section-heading">Best Selling Products</div>
           {bestSelling.map((d, i) => (
             <div key={d.type} className="best-row">
-              <div className="best-medal">{i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}</div>
-              <div className="best-emoji">{d.emoji || '🙏'}</div>
+              <div className="best-medal">{i + 1}</div>
+              <div className="best-emoji">{d.name || 'Item'}</div>
               <div className="best-info">
                 <div className="best-name">{d.type}</div>
                 <div className="best-sub">{d.qty} units • {fmt(d.revenue)}</div>
@@ -69,10 +69,10 @@ const Reports = () => {
         </Card>
 
         <Card>
-          <div className="section-heading">📦 Stock Availability</div>
+          <div className="section-heading">Stock Availability</div>
           {stock.map(g => (
             <div key={g._id} className="stock-row">
-              <span className="stock-emoji">{g.emoji}</span>
+              <span className="stock-emoji">{g.name?.slice(0, 2) || 'IT'}</span>
               <div className="stock-info">
                 <div className="stock-name">{g.name}</div>
                 <div className="stock-sub">{g.type} • {fmt(g.price)}</div>

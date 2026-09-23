@@ -33,10 +33,10 @@ const Customers = () => {
 
   return (
     <Layout dueCount={dueCount}>
-      <h2 className="page-title">👥 Customers</h2>
+      <h2 className="page-title">Customers</h2>
 
       <div className="cust-search">
-        <input placeholder="🔍 Search customer by name or mobile..." value={search} onChange={e => setSearch(e.target.value)} />
+        <input placeholder="Search customer by name or mobile..." value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
       <div className="table-container">
@@ -59,7 +59,7 @@ const Customers = () => {
       </div>
 
       {selected && (
-        <Modal title={`👤 ${selected.name} — Purchase History`} onClose={() => setSelected(null)} wide>
+        <Modal title={`${selected.name} — Purchase History`} onClose={() => setSelected(null)} wide>
           <div className="cust-detail-grid">
             <div className="cust-detail-box"><div className="cust-detail-label">Mobile</div><div className="cust-detail-value">{selected.mobile || '—'}</div></div>
             <div className="cust-detail-box"><div className="cust-detail-label">Total Purchases</div><div className="cust-detail-value">{selected.totalPurchases}</div></div>
@@ -77,7 +77,7 @@ const Customers = () => {
                   <td className={inv.remainingAmount > 0 ? 'cell-red' : 'cell-green'}>{fmt(inv.remainingAmount)}</td>
                   <td>{inv.paymentStatus}</td>
                   <td className="cell-muted">{new Date(inv.invoiceDate).toLocaleDateString('en-IN')}</td>
-                  <td><Button variant="info" small onClick={() => setViewInvoice(inv)}>👁️</Button></td>
+                  <td><Button variant="info" small onClick={() => setViewInvoice(inv)}>View</Button></td>
                 </tr>
               ))}
               {customerInvoices.length === 0 && <tr><td colSpan={7} className="empty-row">No purchases yet.</td></tr>}
@@ -87,8 +87,8 @@ const Customers = () => {
       )}
 
       {viewInvoice && (
-        <Modal title={`🧾 Invoice — ${viewInvoice.invoiceNo}`} onClose={() => setViewInvoice(null)} xlarge>
-          <Invoice invoice={viewInvoice} settings={settings} onClose={() => setViewInvoice(null)} />
+        <Modal title={`Invoice — ${viewInvoice.invoiceNo}`} onClose={() => setViewInvoice(null)} xlarge>
+          <Invoice invoice={viewInvoice} settings={viewInvoice.shopDetails || settings} onClose={() => setViewInvoice(null)} />
         </Modal>
       )}
     </Layout>

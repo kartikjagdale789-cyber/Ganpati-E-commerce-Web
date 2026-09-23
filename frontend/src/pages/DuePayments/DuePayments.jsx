@@ -35,7 +35,7 @@ const DuePayments = () => {
 
   return (
     <Layout dueCount={dues.length}>
-      <h2 className="page-title">💰 Customer Due List</h2>
+      <h2 className="page-title">Customer Due List</h2>
       <div className="due-stats">
         <div className="due-stat due-stat--red">
           <div className="due-stat__label">TOTAL PENDING</div>
@@ -49,7 +49,7 @@ const DuePayments = () => {
 
       <div className="table-container">
         <table className="due-table">
-          <thead><tr>{['Customer','Invoice','Mobile','Date','Total','Paid','⚠️ Due','Status','QR','Actions'].map(h => <th key={h}>{h}</th>)}</tr></thead>
+          <thead><tr>{['Customer','Invoice','Mobile','Date','Total','Paid','Due','Status','QR','Actions'].map(h => <th key={h}>{h}</th>)}</tr></thead>
           <tbody>
             {dues.map((i, idx) => (
               <tr key={i._id} style={{ background: idx % 2 === 0 ? '#fff' : '#fff5f5' }}>
@@ -68,26 +68,26 @@ const DuePayments = () => {
                 </td>
                 <td>
                   <div className="row-actions">
-                    <Button variant="info" small onClick={() => setViewInvoice(i)}>👁️</Button>
-                    <Button variant="success" small onClick={() => setReceivePayInv(i)}>💰 Receive</Button>
+                    <Button variant="info" small onClick={() => setViewInvoice(i)}>View</Button>
+                    <Button variant="success" small onClick={() => setReceivePayInv(i)}>Receive</Button>
                   </div>
                 </td>
               </tr>
             ))}
-            {dues.length === 0 && <tr><td colSpan={10} className="empty-row-success">🎉 No pending dues! All payments received.</td></tr>}
+            {dues.length === 0 && <tr><td colSpan={10} className="empty-row-success">No pending dues. All payments received.</td></tr>}
           </tbody>
         </table>
       </div>
 
       {viewInvoice && (
-        <Modal title={`🧾 Invoice — ${viewInvoice.invoiceNo}`} onClose={() => setViewInvoice(null)} xlarge>
-          <Invoice invoice={viewInvoice} settings={settings} onClose={() => setViewInvoice(null)} />
+        <Modal title={`Invoice — ${viewInvoice.invoiceNo}`} onClose={() => setViewInvoice(null)} xlarge>
+          <Invoice invoice={viewInvoice} settings={viewInvoice.shopDetails || settings} onClose={() => setViewInvoice(null)} />
         </Modal>
       )}
 
       {receivePayInv && (
-        <Modal title={`💰 Receive Payment — ${receivePayInv.invoiceNo}`} onClose={() => setReceivePayInv(null)}>
-          <DueReceiveForm invoice={receivePayInv} settings={settings} onSave={receivePayment} onClose={() => setReceivePayInv(null)} />
+        <Modal title={`Receive Payment — ${receivePayInv.invoiceNo}`} onClose={() => setReceivePayInv(null)}>
+          <DueReceiveForm invoice={receivePayInv} settings={receivePayInv.shopDetails || settings} onSave={receivePayment} onClose={() => setReceivePayInv(null)} />
         </Modal>
       )}
     </Layout>
@@ -116,11 +116,11 @@ const DueReceiveForm = ({ invoice, settings, onSave, onClose }) => {
         </div>
         <div className="form-actions">
           <Button variant="secondary" onClick={onClose} full>Cancel</Button>
-          <Button onClick={() => onSave(+amount, method)} full>✅ Receive {fmt(amount)}</Button>
+          <Button onClick={() => onSave(+amount, method)} full>Receive {fmt(amount)}</Button>
         </div>
       </div>
       <div className="due-receive-qr">
-        <div className="due-receive-qr__title">📱 Scan UPI QR to Receive</div>
+        <div className="due-receive-qr__title">Scan UPI QR to Receive</div>
         {upiStr ? <QRCode data={upiStr} size={160} /> : <div className="due-receive-qr__empty">Set UPI ID in Settings</div>}
         {settings.upiId && <div className="due-receive-qr__id">{settings.upiId}<br />{settings.shopName}</div>}
         <div className="due-receive-qr__amount">Amount: {fmt(amount)}</div>

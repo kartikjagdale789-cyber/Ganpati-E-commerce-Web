@@ -51,11 +51,11 @@ const Sales = () => {
 
   return (
     <Layout dueCount={dueCount}>
-      <h2 className="page-title">📋 Sales History ({invoices.length} records)</h2>
+      <h2 className="page-title">Sales History ({invoices.length} records)</h2>
 
       <Card style={{ marginBottom: 14, padding: 14 }}>
         <div className="sales-filter-grid">
-          <input placeholder="🔍 Search invoice, customer..." value={search} onChange={e => setSearch(e.target.value)} />
+          <input placeholder="Search invoice, customer..." value={search} onChange={e => setSearch(e.target.value)} />
           <input type="date" value={dateF} onChange={e => setDateF(e.target.value)} />
           <select value={statusF} onChange={e => setStatusF(e.target.value)}>
             <option value="">All Statuses</option>
@@ -81,9 +81,9 @@ const Sales = () => {
                 <td className="cell-sub">{new Date(i.invoiceDate).toLocaleDateString('en-IN')}</td>
                 <td>
                   <div className="row-actions">
-                    <Button variant="info" small onClick={() => setViewInvoice(i)}>👁️</Button>
-                    <Button small onClick={() => printInvoice(i, settings)}>🖨️</Button>
-                    {i.remainingAmount > 0 && <Button variant="success" small onClick={() => setReceivePayInv(i)}>💰</Button>}
+                    <Button variant="info" small onClick={() => setViewInvoice(i)}>View</Button>
+                    <Button small onClick={() => printInvoice(i, i.shopDetails || settings)}>Print</Button>
+                    {i.remainingAmount > 0 && <Button variant="success" small onClick={() => setReceivePayInv(i)}>Receive</Button>}
                   </div>
                 </td>
               </tr>
@@ -95,8 +95,8 @@ const Sales = () => {
       {filtered.length > 0 && <div className="total-shown">Total Shown: {fmt(totalShown)}</div>}
 
       {viewInvoice && (
-        <Modal title={`🧾 Invoice — ${viewInvoice.invoiceNo}`} onClose={() => setViewInvoice(null)} xlarge>
-          <Invoice invoice={viewInvoice} settings={settings} onClose={() => setViewInvoice(null)} />
+        <Modal title={`Invoice — ${viewInvoice.invoiceNo}`} onClose={() => setViewInvoice(null)} xlarge>
+          <Invoice invoice={viewInvoice} settings={viewInvoice.shopDetails || settings} onClose={() => setViewInvoice(null)} />
         </Modal>
       )}
 
@@ -111,7 +111,7 @@ const ReceivePaymentModal = ({ invoice, onClose, onSave }) => {
   const [amount, setAmount] = useState(invoice.remainingAmount);
   const [method, setMethod] = useState('Cash');
   return (
-    <Modal title={`💰 Receive Payment — ${invoice.invoiceNo}`} onClose={onClose}>
+    <Modal title={`Receive Payment — ${invoice.invoiceNo}`} onClose={onClose}>
       <div className="pay-summary">
         <div className="pay-row"><span>Total Amount</span><strong>{fmt(invoice.totalAmount)}</strong></div>
         <div className="pay-row" style={{ color: '#15803d' }}><span>Already Paid</span><strong>{fmt(invoice.paidAmount)}</strong></div>
@@ -127,7 +127,7 @@ const ReceivePaymentModal = ({ invoice, onClose, onSave }) => {
       </div>
       <div className="form-actions">
         <Button variant="secondary" onClick={onClose} full>Cancel</Button>
-        <Button onClick={() => onSave(+amount, method)} full>✅ Receive {fmt(amount)}</Button>
+        <Button onClick={() => onSave(+amount, method)} full>Receive {fmt(amount)}</Button>
       </div>
     </Modal>
   );

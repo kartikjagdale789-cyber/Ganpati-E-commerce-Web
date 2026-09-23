@@ -38,7 +38,7 @@ exports.dashboard = async (_req, res) => {
         totalStock      : inventory.reduce((s, i) => s + i.qty, 0),
       },
     });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Dashboard report could not be loaded' }); }
 };
 
 /* GET /api/reports/sales?type=daily|weekly|monthly|all */
@@ -57,7 +57,7 @@ exports.sales = async (req, res) => {
         totalDue    : invoices.reduce((s, i) => s + i.remainingAmount, 0),
       },
     });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Sales report could not be loaded' }); }
 };
 
 /* GET /api/reports/best-selling */
@@ -74,7 +74,7 @@ exports.bestSelling = async (_req, res) => {
     );
     const sorted = Object.values(map).sort((a, b) => b.qty - a.qty);
     res.json({ success: true, data: sorted });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Best-selling report could not be loaded' }); }
 };
 
 /* GET /api/reports/stock */
@@ -82,5 +82,5 @@ exports.stock = async (_req, res) => {
   try {
     const inventory = await Inventory.find({ isActive: true });
     res.json({ success: true, data: inventory });
-  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+  } catch (err) { res.status(500).json({ success: false, message: 'Stock report could not be loaded' }); }
 };

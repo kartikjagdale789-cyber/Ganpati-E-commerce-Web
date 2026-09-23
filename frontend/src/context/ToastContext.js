@@ -24,7 +24,7 @@ export const ToastProvider = ({ children }) => {
             padding:'12px 18px', borderRadius:10, fontWeight:700, fontSize:14,
             boxShadow:'0 4px 24px rgba(0,0,0,.18)', display:'flex', alignItems:'center', gap:10, maxWidth:340,
           }}>
-            {t.type==='error'?'❌':t.type==='info'?'ℹ️':t.type==='warning'?'⚠️':'✅'} {t.msg}
+            <strong className={`toast-type toast-type--${t.type}`}>{t.type === 'error' ? 'Error' : t.type === 'info' ? 'Info' : t.type === 'warning' ? 'Notice' : 'Success'}</strong> {t.msg}
             <button onClick={() => remove(t.id)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:16, marginLeft:'auto' }}>×</button>
           </div>
         ))}
