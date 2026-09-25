@@ -64,7 +64,7 @@ The seed command never creates credentials. The first owner must be created thro
 
 Copy `backend/.env.example` to `backend/.env`. Required production values are `MONGODB_URI`, `JWT_SECRET` (minimum 64 characters), and `CLIENT_URL`. Multiple allowed client origins can be comma-separated in `CLIENT_URL`.
 
-Copy `frontend/.env.example` to `frontend/.env` and set `REACT_APP_API_URL` to the deployed API URL.
+Copy `frontend/.env.example` to `frontend/.env` and set `REACT_APP_API_URL` to the deployed API URL. The frontend accepts either the host URL or the host URL ending in `/api` and normalizes it automatically.
 
 Optional integrations use environment variables only: Sentry, Razorpay, SMTP, Cloudinary, and session configuration placeholders are included in `backend/.env.example`.
 
@@ -72,7 +72,7 @@ Optional integrations use environment variables only: Sentry, Razorpay, SMTP, Cl
 
 1. Provision MongoDB with authentication, backups, and network restrictions.
 2. Set production values from `backend/.env.example`; never commit `.env` files.
-3. Build the frontend with `npm run build` and serve `frontend/build` from a static host or Nginx.
+3. Set the Render backend variable `CLIENT_URL` to the exact Vercel origin, for example `https://ganpati-e-commerce-web-jyxm.vercel.app` (no trailing slash). Set Vercel's `REACT_APP_API_URL` to `https://ganpati-e-commerce-web.onrender.com/api`, then build the frontend with `npm run build` and serve `frontend/build` from a static host or Nginx.
 4. Start the API with PM2 from the repository root:
 
 ```bash
