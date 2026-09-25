@@ -17,13 +17,14 @@ const schemas = {
     height: z.string().trim().min(1).max(50).optional(), color: z.string().trim().min(1).max(100).optional(),
     price: number.nonnegative().optional(), qty: number.int().nonnegative().optional(),
     emoji: z.string().max(20).optional(), description: z.string().max(2000).optional(),
-  }).strict(),
+  }),
   qty: z.object({ qty: number.int().nonnegative() }),
   invoice: z.object({
     customerName: z.string().trim().min(1).max(200), customerMobile: z.string().max(30).optional(),
     customerEmail: z.string().email().max(200).optional().or(z.literal('')), items: z.array(z.object({
-      inventoryRef: objectId, name: z.string().max(200), type: z.string().max(100).optional(),
-      height: z.string().max(50).optional(), color: z.string().max(100).optional(), qty: number.int().positive(), unitPrice: number.nonnegative(),
+      ganpatiId: objectId, inventoryRef: objectId, name: z.string().max(200), type: z.string().max(100),
+      height: z.string().max(50).optional(), color: z.string().max(100).optional(), emoji: z.string().max(20).optional(),
+      qty: number.int().positive(), unitPrice: number.nonnegative(),
     })).min(1).max(500), paidAmount: number.nonnegative().optional(), discount: number.nonnegative().optional(),
     paymentMethod: z.string().trim().max(50).optional(), notes: z.string().max(2000).optional(),
   }),

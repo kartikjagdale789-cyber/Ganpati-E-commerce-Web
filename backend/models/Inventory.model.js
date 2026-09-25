@@ -15,12 +15,11 @@ const inventorySchema = new mongoose.Schema({
 }, { timestamps: true, toJSON: { virtuals: true } });
 
 /* Auto-generate ganpatiId */
-inventorySchema.pre('save', async function (next) {
+inventorySchema.pre('save', async function () {
   if (!this.ganpatiId) {
     const count = await mongoose.model('Inventory').countDocuments();
     this.ganpatiId = `G-${String(count + 1).padStart(3, '0')}`;
   }
-  next();
 });
 
 /* Virtual: stock status */

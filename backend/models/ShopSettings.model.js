@@ -21,7 +21,7 @@ const shopSettingsSchema = new mongoose.Schema({
   currency         : { type: String, default: 'INR' },
 }, { timestamps: true, strict: false });
 
-shopSettingsSchema.pre('save', function (next) {
+shopSettingsSchema.pre('save', function () {
   if (this.isModified('mobileNumber')) {
     this.mobile = this.mobileNumber;
   } else if (this.isModified('mobile')) {
@@ -39,7 +39,6 @@ shopSettingsSchema.pre('save', function (next) {
     if (this.shopAddress && !this.address) this.address = this.shopAddress;
     if (this.address && !this.shopAddress) this.shopAddress = this.address;
   }
-  next();
 });
 
 module.exports = mongoose.model('ShopSettings', shopSettingsSchema);

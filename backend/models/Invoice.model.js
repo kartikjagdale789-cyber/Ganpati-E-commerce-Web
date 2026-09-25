@@ -80,7 +80,7 @@ const invoiceSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 /* ── Pre-save: auto IDs + payment status ─────────────────────────────────── */
-invoiceSchema.pre('save', async function (next) {
+invoiceSchema.pre('save', async function () {
   if (!this.invoiceNo) {
     let prefix = 'INV';
     try {
@@ -113,7 +113,6 @@ invoiceSchema.pre('save', async function (next) {
     this.paymentStatus  = 'Unpaid';
     this.remainingAmount = this.totalAmount;
   }
-  next();
 });
 
 module.exports = mongoose.model('Invoice', invoiceSchema);

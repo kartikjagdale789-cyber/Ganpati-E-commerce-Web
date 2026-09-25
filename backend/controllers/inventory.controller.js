@@ -1,4 +1,5 @@
 const Inventory = require('../models/Inventory.model');
+const logger = require('../utils/logger');
 
 /* GET /api/inventory */
 exports.getAll = async (req, res) => {
@@ -30,24 +31,36 @@ exports.getOne = async (req, res) => {
 /* POST /api/inventory */
 exports.create = async (req, res) => {
   try {
-    const data = { ...req.body, price: +req.body.price, qty: +req.body.qty };
+    const data = {
+      name: req.body.name,
+      type: req.body.type,
+      height: req.body.height,
+      color: req.body.color,
+      price: Number(req.body.price),
+      qty: Number(req.body.qty),
+      emoji: req.body.emoji,
+      description: req.body.description,
+    };
     if (req.file) data.image = `/uploads/${req.file.filename}`;
     const item = await Inventory.create(data);
     res.status(201).json({ success: true, data: item });
-  } catch (err) { res.status(400).json({ success: false, message: 'Inventory item could not be created' }); }
+  } catch (err) { logger.error({ err }, 'Inventory item creation failed'); res.status(400).json({ success: false, message: 'Inventory item could not be created' }); }
 };
 
 /* PUT /api/inventory/:id */
 exports.update = async (req, res) => {
   try {
-    const data = { ...req.body };
+    const data = {};
+    ['name', 'type', 'height', 'color', 'emoji', 'description'].forEach((key) => {
+      if (req.body[key] !== undefined) data[key] = req.body[key];
+    });
     if (req.body.price !== undefined) data.price = +req.body.price;
     if (req.body.qty   !== undefined) data.qty   = +req.body.qty;
     if (req.file) data.image = `/uploads/${req.file.filename}`;
     const item = await Inventory.findByIdAndUpdate(req.params.id, data, { new: true, runValidators: true });
     if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
     res.json({ success: true, data: item });
-  } catch (err) { res.status(400).json({ success: false, message: 'Inventory item could not be updated' }); }
+  } catch (err) { logger.error({ err }, 'Inventory item update failed'); res.status(400).json({ success: false, message: 'Inventory item could not be updated' }); }
 };
 
 /* DELETE /api/inventory/:id  (soft delete) */
